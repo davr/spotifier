@@ -1,4 +1,4 @@
-# Streamlit app to use the Spotify API for reccomendations 
+# NiceGUI app to use the Spotify API for reccomendations 
 
 ## Table of Contents
 
@@ -20,18 +20,17 @@ Uses the Spotify API for reccomendations based on search term (for artist, song 
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
 
-docker run -ti spotifyapp:latest
+pip install -r requirements.txt
 
 ## Usage <a name = "usage"></a>
 
 To run the app, run:
 
-streamlit run spotify_explorer.py
+python spotify_explorer.py
 
 ## Deployed at <a name = "deploy"></a>
 
-https://spotiapp2.azurewebsites.net/
-
+TBD
 
 
 
