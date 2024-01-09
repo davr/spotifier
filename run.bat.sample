@@ -1,0 +1,6 @@
+@echo off
+rem set SPOTIPY_USER_ID=aaaaaaaaaaaaaaaaaaaaaaaaa
+set SPOTIPY_CLIENT_ID=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+set SPOTIPY_CLIENT_SECRET=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+set SPOTIPY_REDIRECT_URI=http://localhost:8080/auth
+python spotify_explorer.py
