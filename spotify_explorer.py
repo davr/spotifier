@@ -69,7 +69,7 @@ def tracks_to_df(tracks):
 async def page(client):
     def logout():
         NiceguiCache.clear_cache()
-        ui.open("/auth", new_tab=False)
+        ui.navigate.to("/auth", new_tab=False)
 
     def onsearch(e):
         print(stsearch.value)
@@ -198,13 +198,13 @@ async def page(client):
             if code != url:
                 token = sp_auth.get_access_token(code)
                 access_token = token["access_token"]
-                ui.open("/auth", new_tab=False)
+                ui.navigate.to("/auth", new_tab=False)
 
         # No token, redirecto to spotify
         if not access_token:
             ui.button(
                 "Authorize Spotify",
-                on_click=lambda ev: ui.open(sp_auth.get_authorize_url(), new_tab=False),
+                on_click=lambda ev: ui.navigate.to(sp_auth.get_authorize_url(), new_tab=False),
             )
             return None
 
