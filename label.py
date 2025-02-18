@@ -3,6 +3,38 @@ from spotipy.oauth2 import SpotifyOAuth
 from datetime import datetime
 from tqdm import tqdm
 import time
+from twilio.rest import Client
+import requests,json
+import os
+
+TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
+TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
+TWILIO_FROM = os.getenv('TWILIO_FROM')
+
+if TWILIO_ACCOUNT_SID and TWILIO_AUTH_TOKEN and TWILIO_FROM:
+    twil = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+else:
+    twil = None
+    print("ERR: TWILIO VARS NOT SET")
+
+def send_sms(to_phone, message):
+    """
+    Send an SMS using Twilio.
+
+    Args:
+        to_phone (str): Recipient's phone number in E.164 format (e.g., '+1234567890').
+        from_phone (str): Twilio phone number in E.164 format.
+        message (str): The text message to send.
+    """
+    try:
+        message_response = twil.messages.create(
+            body=message,
+            from_=TWILIO_FROM,
+            to=to_phone
+        )
+        print(f"Message sent! SID: {message_response.sid}")
+    except Exception as e:
+        print(f"Failed to send SMS: {e}")
 
 # Spotify API scopes
 SCOPES = "playlist-modify-public playlist-modify-private playlist-read-private"
@@ -175,6 +207,7 @@ def main():
         print(f"Adding {len(new_tracks)} new tracks to the playlist...")
         add_tracks_to_playlist_sorted(playlist_id, new_tracks)
         print(f"Playlist '{playlist_name}' updated successfully!")
+        send_sms("+15102921715", f"{len(new_tracks)} new tracks added to TNH {current_year}!")
     else:
         print("No new tracks to add.")
 
