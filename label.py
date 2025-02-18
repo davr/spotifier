@@ -207,7 +207,7 @@ def main():
         print(f"Adding {len(new_tracks)} new tracks to the playlist...")
         add_tracks_to_playlist_sorted(playlist_id, new_tracks)
         print(f"Playlist '{playlist_name}' updated successfully!")
-        send_sms("+15102921715", f"{len(new_tracks)} new tracks added to TNH {current_year}!")
+        send_sms("+15102921715", f"{len(new_tracks)} new tracks added to TNH {current_year}! https://open.spotify.com/playlist/{playlist_id}")
     else:
         print("No new tracks to add.")
 
