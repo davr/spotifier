@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+cd "$(dirname "$0")"
+export SPOTIPY_CLIENT_ID=aaaaaaaaaaaaaaaaaaaaaaa
+export SPOTIPY_CLIENT_SECRET=bbbbbbbbbbbbbbbbbbb
+export SPOTIPY_REDIRECT_URI=http://localhost:8969/auth
+export TWILIO_ACCOUNT_SID=AAAAAAAAAAAAAAAAAAAA
+export TWILIO_AUTH_TOKEN=88888888888888888888
+export TWILIO_FROM="+10001112222"
+date
+./venv/bin/python label.py
