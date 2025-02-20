@@ -6,6 +6,7 @@ import time
 from twilio.rest import Client
 import requests,json
 import os
+import traceback
 
 TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
 TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
@@ -46,8 +47,6 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
 #    redirect_uri=SPOTIFY_REDIRECT_URI,
     scope=SCOPES
 ))
-
-existing_tracks = []
 
 def get_existing_playlist(user_id, playlist_name):
     """
@@ -147,6 +146,7 @@ def add_tracks_to_playlist_sorted(playlist_id, tracks):
         time.sleep(1.01)
 
 def main():
+    existing_tracks = []
     # Input record label and playlist details
     label_name = "This Never Happened" #input("Enter the record label name: ")
     current_year = datetime.now().year
@@ -156,13 +156,24 @@ def main():
     user_id = sp.current_user()['id']
     playlist_id = get_existing_playlist(user_id, playlist_name)
 
-    for last_year in range(2016, current_year):
+    start_year = 2016
+    if os.path.exists("existing.json"):
+        with open("existing.json","r") as inf:
+            existing_tracks = json.load(inf)
+        print(f"Loaded {len(existing_tracks)} cached existing tracks")
+        if len(existing_tracks) > 500:
+            start_year = current_year
+
+    for last_year in range(start_year, current_year):
         last_playlist_name = f"{label_name} in {last_year}"
         last_playlist_id = get_existing_playlist(user_id, last_playlist_name)
         if last_playlist_id:
             print(f"Fetching existing tracks in {last_year} playlist...")
             existing_tracks.extend(get_tracks_in_playlist(last_playlist_id))
             print(f"{len(existing_tracks)} existing so far")
+
+    with open("existing.json","w") as outf:
+        json.dump(existing_tracks, outf, indent=2)
 
     # Create a new playlist if it doesn't exist
     if not playlist_id:
@@ -212,4 +223,13 @@ def main():
         print("No new tracks to add.")
 
 if __name__ == "__main__":
-    main()
+    for i in [1,2,3,4,5]:
+        try:
+            main()
+            break
+        except Exception as e:
+            print(e)
+            traceback.print_exc()
+            print(f"retrying in {2**i}...") 
+            time.sleep(2**i)
+
